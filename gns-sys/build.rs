@@ -106,13 +106,13 @@ fn link_protobuf_default() {
     link("static=protobuf");
 }
 
-fn link_protobuf() {
+fn link_protobuf() -> Option<PathBuf> {
     let mut config = pkg_config::Config::new();
     if std::env::var("CARGO_CFG_TARGET_OS").unwrap() != "macos" {
         config.statik(true);
     }
     let result = config
-        .atleast_version("2.6.1")
+        .atleast_version("33.0")
         .probe("protobuf");
     match result {
         Err(pkg_config::Error::EnvNoPkgConfig(_)) => {
@@ -121,6 +121,7 @@ fn link_protobuf() {
                  for protobuf"
             );
             link_protobuf_default();
+            None
         },
         Err(pkg_config::Error::ProbeFailure { name, command, output }) => {
             println!(
@@ -130,10 +131,14 @@ fn link_protobuf() {
                 pkg_config::Error::ProbeFailure { name, command, output },
             );
             link_protobuf_default();
+            None
         },
         Err(e) => Err(e).unwrap(),
-        Ok(_) => {},
-    };
+        Ok(lib) => {
+            // Extract the prefix path from include paths (e.g., /opt/homebrew/Cellar/protobuf/33.2/include -> /opt/homebrew/Cellar/protobuf/33.2)
+            lib.include_paths.first().map(|p| p.parent().unwrap().to_path_buf())
+        },
+    }
 }
 
 fn link_openssl_default() {
@@ -380,8 +385,13 @@ fn main() {
         c.define("VCPKG_INSTALLED_DIR", &vcpkg_installed_root);
         c.define("VCPKG_INSTALL_OPTIONS", &buildtrees_root_arg);
     } else {
-        link_protobuf();
+        let protobuf_root = link_protobuf();
         link_openssl();
+
+        // Pass protobuf location to CMake to avoid version conflicts
+        if let Some(root) = protobuf_root {
+            c.define("Protobuf_ROOT", &root);
+        }
     }
     link_stdlib();
 
