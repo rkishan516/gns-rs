@@ -32,8 +32,8 @@ Tools required to be in $PATH:
 
 ### Windows
 
-Building on Windows uses [vcpkg](https://github.com/microsoft/vcpkg) in manifest mode to gather and 
-build dependencies. As such, the only requirement on Windows is to have `clang` installed and `git` 
+Building on Windows uses [vcpkg](https://github.com/microsoft/vcpkg) in manifest mode to gather and
+build dependencies. As such, the only requirement on Windows is to have `clang` installed and `git`
 available in $PATH.
 
 ### macOS
