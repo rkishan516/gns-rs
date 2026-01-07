@@ -5,7 +5,6 @@
 
 Simple, high-level and (somehow) type-safe wrapper for [Valve GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets).
 
-- [**Go ahead and read the documentation**](https://hussein-aitlahcen.github.io/gns-rs/gns/)
 - [**Have a quick look at the reliable chat client/server implementation**](./example/src/main.rs)
 
 The library does not require your application to be running with Steam and this wrapper is intended to wrap the open-source version only.
@@ -32,8 +31,8 @@ Tools required to be in $PATH:
 
 ### Windows
 
-Building on Windows uses [vcpkg](https://github.com/microsoft/vcpkg) in manifest mode to gather and 
-build dependencies. As such, the only requirement on Windows is to have `clang` installed and `git` 
+Building on Windows uses [vcpkg](https://github.com/microsoft/vcpkg) in manifest mode to gather and
+build dependencies. As such, the only requirement on Windows is to have `clang` installed and `git`
 available in $PATH.
 
 ### macOS
